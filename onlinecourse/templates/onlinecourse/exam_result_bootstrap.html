@@ -54,20 +54,16 @@
 
 
         <div class="card mt-1">
-            {% for question in course.quesiton_set.all %}
+            {% for question in course.question_set.all %}
             <div class="card-header"><h5>{{ question.question_text}}</h5></div>
             {% csrf_token %}
-                <div class="form-group">
-                {% for choice in question.choice_set.all %}
-                    <div class="form-check">
-                        <label class="form-check-label">
-                            <input type="checkbox" name="choice_{{choice.id}}"
-                                class="form-check-input" id="{{choice.id}}"
-                                value="{{choice.id}}">{{ choice.choice_text }}
-                        </label>
-                    </div>
+                {% for choice in submission.choices.all %}
+                    {% if choice.is_correct and choice.question_id is question.id%}
+                    <div class="text-success"><b>Correct:</b> {{choice.choice_text}}</div>
+                    {% elif choice.question_id is question.id %}
+                    <div class="text-danger"><b>Incorrect:</b> {{choice.choice_text}}</div>
+                    {% endif %}
                 {% endfor %}
-                </div>
             </div>
             {% endfor %}
         </div>
